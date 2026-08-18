@@ -1,0 +1,5 @@
+[project]
+name = "bloom-lora-finetuning"
+version = "0.1.0"
+description = "BLOOM LoRA Fine-Tuning"
+requires-python = ">=3.10"
