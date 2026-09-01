@@ -3,3 +3,26 @@ name = "bloom-lora-finetuning"
 version = "0.1.0"
 description = "BLOOM LoRA Fine-Tuning"
 requires-python = ">=3.10"
+dependencies = [
+    "pyyaml>=6.0",
+    "datasets>=2.16",
+]
+
+[project.optional-dependencies]
+# Training stack (Phase 2+): heavy, GPU-oriented -- kept out of the base install
+# and CI so the Phase 1 data pipeline stays fast to set up.
+train = [
+    "torch>=2.1",
+    "transformers>=4.38",
+    "peft>=0.9",
+    "bitsandbytes>=0.42",
+    "accelerate>=0.27",
+]
+dev = ["pytest>=7.4"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools]
+packages = ["src", "src.data"]

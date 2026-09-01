@@ -4,7 +4,7 @@
 > This is an original, from-scratch build. It is not affiliated with, and does not
 > contain any code, prompts, data, or business logic from, any employer or client.
 
-![status](https://img.shields.io/badge/status-planned-lightgrey)
+![status](https://img.shields.io/badge/status-in%20progress-yellow)
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
@@ -85,7 +85,15 @@ No proprietary, employer-owned, or client-identifiable data is used in this proj
 Document the commands used to run training, ingestion, or the main pipeline, e.g.:
 
 ```bash
-python -m src.main --config configs/default.yaml
+# Phase 1: build a cleaned instruction dataset from the bundled example
+python -m src.main prepare --source jsonl \
+    --input examples/sample_raw.jsonl \
+    --output data/processed/clean.jsonl \
+    --config configs/dataset.yaml
+
+# or pull a public dataset from the Hugging Face Hub
+python -m src.main prepare --source hf --hf-name tatsu-lab/alpaca --limit 2000 \
+    --output data/processed/clean.jsonl --config configs/dataset.yaml
 ```
 
 ## 10. Evaluation

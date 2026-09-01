@@ -1,0 +1,23 @@
+# Dataset preparation config for BLOOM LoRA fine-tuning (Phase 1).
+#
+#   python -m src.main prepare --source jsonl --input examples/sample_raw.jsonl \
+#       --output data/processed/clean.jsonl --config configs/dataset.yaml
+
+cleaning:
+  min_instruction_chars: 3
+  min_response_chars: 1
+  max_chars: 8000
+  max_control_char_ratio: 0.02
+  drop_exact_duplicates: true
+  # Maps our canonical fields -> the raw dataset's field names.
+  # Alpaca-style datasets use instruction / input / output.
+  field_map:
+    instruction: instruction
+    context: input
+    response: output
+
+huggingface:
+  # A public, permissively-licensed instruction dataset.
+  name: tatsu-lab/alpaca
+  split: train
+  config: null

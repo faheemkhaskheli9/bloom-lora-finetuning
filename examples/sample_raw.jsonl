@@ -1,0 +1,12 @@
+{"instruction": "Summarize the following paragraph in one sentence.", "input": "The water cycle describes how water moves between the oceans, the atmosphere, and the land through evaporation, condensation, and precipitation.", "output": "Water continuously circulates between oceans, air, and land via evaporation, condensation, and precipitation."}
+{"instruction": "Convert 3 kilometers to meters.", "input": "", "output": "3 kilometers is 3000 meters."}
+{"instruction": "List three primary colors.", "input": "", "output": "Red, blue, and yellow."}
+{"instruction": "  Explain what a prime number is.  ", "input": "", "output": "A prime number is a whole number greater than 1 whose only divisors are 1 and itself."}
+{"instruction": "Translate 'good morning' into Spanish.", "input": "", "output": "Buenos dias."}
+{"instruction": "", "input": "", "output": "This example has no instruction and should be dropped."}
+{"instruction": "This example has no output and should be dropped.", "input": "", "output": "   "}
+{"instruction": "List three primary colors.", "input": "", "output": "Red, blue, and yellow."}
+{"instruction": "Echo test.", "input": "", "output": "Echo test."}
+{"instruction": "Give one fact about the moon.", "input": "", "output": "The Moon    is Earth's only natural satellite    and orbits Earth roughly every 27 days."}
+{"instruction": "Name the largest planet in the Solar System.", "input": "", "output": "Jupiter is the largest planet in the Solar System."}
+not-json-just-text

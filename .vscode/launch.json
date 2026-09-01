@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "BLOOM LoRA: prepare dataset (JSONL example)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.main",
+      "args": [
+        "prepare",
+        "--source",
+        "jsonl",
+        "--input",
+        "examples/sample_raw.jsonl",
+        "--output",
+        "data/processed/clean.jsonl",
+        "--config",
+        "configs/dataset.yaml"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "BLOOM LoRA: pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

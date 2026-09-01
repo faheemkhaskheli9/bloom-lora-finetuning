@@ -1,1 +1,6 @@
-# Fill in with the exact package versions used once implementation starts.
+# Phase 1 (dataset preparation) dependencies.
+# The training stack (torch, transformers, peft, bitsandbytes, accelerate) is
+# declared as the `train` extra in pyproject.toml and pinned here in Phase 2.
+pyyaml>=6.0
+datasets>=2.16
+pytest>=7.4
