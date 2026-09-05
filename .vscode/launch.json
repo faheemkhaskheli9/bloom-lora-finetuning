@@ -21,6 +21,15 @@
       "cwd": "${workspaceFolder}"
     },
     {
+      "name": "BLOOM LoRA: tokenize sample text",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.main",
+      "args": ["tokenize", "--text", "The quick brown fox jumps over the lazy dog.", "--max-length", "32"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
       "name": "BLOOM LoRA: pytest",
       "type": "debugpy",
       "request": "launch",

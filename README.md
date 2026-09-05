@@ -94,6 +94,9 @@ python -m src.main prepare --source jsonl \
 # or pull a public dataset from the Hugging Face Hub
 python -m src.main prepare --source hf --hf-name tatsu-lab/alpaca --limit 2000 \
     --output data/processed/clean.jsonl --config configs/dataset.yaml
+
+# Phase 1: tokenize one example with the real BLOOM tokenizer
+python -m src.main tokenize --text "Explain gradient descent." --max-length 128
 ```
 
 ## 10. Evaluation

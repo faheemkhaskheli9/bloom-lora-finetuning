@@ -16,7 +16,9 @@ import sys
 from pathlib import Path
 
 from src.data.pipeline import load_config, prepare_dataset
+from src.data.schema import InstructionRecord
 from src.data.sources import DatasetSourceError, iter_hf_dataset, iter_jsonl
+from src.data.tokenization import DEFAULT_TOKENIZER_NAME, load_bloom_tokenizer, tokenize_text
 
 DEFAULT_CONFIG = Path("configs/dataset.yaml")
 DEFAULT_OUTPUT = Path("data/processed/clean.jsonl")
@@ -50,6 +52,20 @@ def _cmd_prepare(args: argparse.Namespace) -> int:
     return 0 if result.kept > 0 else 2
 
 
+def _cmd_tokenize(args: argparse.Namespace) -> int:
+    if not args.text and not args.text_file:
+        print("error: one of --text or --text-file is required", file=sys.stderr)
+        return 1
+    tokenizer = load_bloom_tokenizer(args.tokenizer)
+    text = args.text if args.text else Path(args.text_file).read_text(encoding="utf-8")
+    example = tokenize_text(text, tokenizer=tokenizer, max_length=args.max_length)
+    print(f"tokenizer: {args.tokenizer}")
+    print(f"max_length: {args.max_length}")
+    print(f"input_ids ({len(example.input_ids)}): {example.input_ids}")
+    print(f"attention_mask ({len(example.attention_mask)}): {example.attention_mask}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="bloom-lora", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -62,6 +78,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     p.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     p.set_defaults(func=_cmd_prepare)
+
+    p_tok = sub.add_parser("tokenize", help="Tokenize one example with the BLOOM tokenizer.")
+    p_tok.add_argument("--text", help="Raw text to tokenize.")
+    p_tok.add_argument("--text-file", type=Path, help="Path to a text file to tokenize.")
+    p_tok.add_argument("--tokenizer", default=DEFAULT_TOKENIZER_NAME)
+    p_tok.add_argument("--max-length", type=int, default=256)
+    p_tok.set_defaults(func=_cmd_tokenize)
     return parser
 
 
@@ -70,7 +93,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     # A default config path that does not exist -> fall back to defaults (rule 7).
-    if args.config == DEFAULT_CONFIG and not args.config.is_file():
+    # Only the "prepare" command has a --config option at all.
+    if getattr(args, "config", None) == DEFAULT_CONFIG and not args.config.is_file():
         args.config = None
     return args.func(args)
 
