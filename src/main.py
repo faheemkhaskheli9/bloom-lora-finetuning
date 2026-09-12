@@ -18,6 +18,7 @@ from pathlib import Path
 from src.data.pipeline import load_config, prepare_dataset
 from src.data.schema import InstructionRecord
 from src.data.sources import DatasetSourceError, iter_hf_dataset, iter_jsonl
+from src.data.split import load_split_config, split_records, write_split
 from src.data.tokenization import DEFAULT_TOKENIZER_NAME, load_bloom_tokenizer, tokenize_text
 
 DEFAULT_CONFIG = Path("configs/dataset.yaml")
@@ -52,6 +53,30 @@ def _cmd_prepare(args: argparse.Namespace) -> int:
     return 0 if result.kept > 0 else 2
 
 
+def _cmd_split(args: argparse.Namespace) -> int:
+    try:
+        split_cfg = load_split_config(args.config)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    try:
+        records = [InstructionRecord(**row) for row in iter_jsonl(args.input)]
+    except DatasetSourceError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    result = split_records(records, split_cfg)
+    paths = write_split(result, args.output_dir)
+    print(
+        f"split {len(records)} record(s) -> "
+        f"{len(result.train)} train, {len(result.val)} val "
+        f"(val_fraction={split_cfg.val_fraction}, seed={split_cfg.seed})"
+    )
+    print(f"wrote {paths['train']} and {paths['val']}")
+    return 0
+
+
 def _cmd_tokenize(args: argparse.Namespace) -> int:
     if not args.text and not args.text_file:
         print("error: one of --text or --text-file is required", file=sys.stderr)
@@ -78,6 +103,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     p.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     p.set_defaults(func=_cmd_prepare)
+
+    p_split = sub.add_parser(
+        "split", help="Split a cleaned JSONL dataset into train/val JSONL files."
+    )
+    p_split.add_argument("--input", type=Path, required=True, help="Cleaned JSONL path.")
+    p_split.add_argument("--output-dir", type=Path, required=True, help="Directory for train.jsonl/val.jsonl.")
+    p_split.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    p_split.set_defaults(func=_cmd_split)
 
     p_tok = sub.add_parser("tokenize", help="Tokenize one example with the BLOOM tokenizer.")
     p_tok.add_argument("--text", help="Raw text to tokenize.")

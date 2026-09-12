@@ -21,3 +21,10 @@ huggingface:
   name: tatsu-lab/alpaca
   split: train
   config: null
+
+# Train/validation split of the cleaned dataset (Phase 1):
+#   python -m src.main split --input data/processed/clean.jsonl \
+#       --output-dir data/processed --config configs/dataset.yaml
+split:
+  val_fraction: 0.1
+  seed: 42

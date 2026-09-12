@@ -48,7 +48,7 @@ def load_config(path: str | Path | None) -> PrepareConfig:
     )
 
 
-def _atomic_write_jsonl(records, dest: Path) -> None:
+def atomic_write_jsonl(records, dest: Path) -> None:
     """Write records to ``dest`` via a temp file + ``os.replace`` (rule 1).
 
     A crash mid-write leaves the temp file, never a truncated ``dest``.
@@ -74,7 +74,7 @@ def prepare_dataset(
     result = clean_dataset(rows, cfg.cleaning)
 
     dest = Path(output_path)
-    _atomic_write_jsonl(result.records, dest)
+    atomic_write_jsonl(result.records, dest)
 
     stats = {
         "total": result.total,
