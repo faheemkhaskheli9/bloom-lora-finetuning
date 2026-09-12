@@ -1,42 +1,35 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "BLOOM LoRA: prepare dataset (JSONL example)",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "src.main",
-      "args": [
-        "prepare",
-        "--source",
-        "jsonl",
-        "--input",
-        "examples/sample_raw.jsonl",
-        "--output",
-        "data/processed/clean.jsonl",
-        "--config",
-        "configs/dataset.yaml"
-      ],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "BLOOM LoRA: tokenize sample text",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "src.main",
-      "args": ["tokenize", "--text", "The quick brown fox jumps over the lazy dog.", "--max-length", "32"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "BLOOM LoRA: pytest",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "pytest",
-      "args": ["tests/", "-v"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Debug Tests (pytest)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "tests",
+                "-v"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Python: Run Entry Point",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
+        }
+    ]
 }
